@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Speed App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!-- Base css, but you'll likely want to keep them -->
+    <link rel="stylesheet" href="css/reset.css" type="text/css">
+
+    <!-- Your custom files -->
+    <link rel="stylesheet" href="css/app.css" type="text/css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Lets integrate Justgage to spice things up!!!  -->
+    <script type="text/javascript" src="js/justgage-1.2.2/justgage.js"></script>
+    <script type="text/javascript" src="js/justgage-1.2.2/raphael-2.1.4.min.js"></script>
+
+    <!-- Adding guage JS for the compass -->
+    <script type="text/javascript" src="js/guage.min.js"></script>
+    
+    <!-- Chart JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script src="js/ngi.polyfill.min.js"></script>
+    <script src="GMLIB/system.js"></script>
+    <script src="GMLIB/info.js"></script>
+
+    <!-- Uncomment libraries as you need them: -->
+    <script src="GMLIB/comm.js"></script>
+    <script src="GMLIB/io.js"></script>
+    <script src="GMLIB/media.js"></script>
+    <script src="GMLIB/nav.js"></script>
+    <script src="GMLIB/phone.js"></script>
+    <script src="GMLIB/ui.js"></script>
+    <script src="GMLIB/voice.js"></script>
+    <script src="js/jquery.knob.min.js"></script>
+    <script src="js/app.js"></script>
+
+
+  </head>
+  <body>
+   <!--<body style="background-image:url(images/Panther_Schedule.png)" style="opacity(50)">-->
+    <!-- LEAVE THIS UNTIL YOU FIND SOMETHING BETTER -->
+
+    <style>
+      body::after {
+      background: url(images/Panther_Schedule.png);
+      content: "";
+      opacity: 0.9;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: -1;   
+      }
+    </style>
+
+        <div class="wrapper">
+          <div class="flexbox">
+
+            <div class="box">
+              <div id="Coolant" class="gauge"></div>
+            </div>
+
+            <div class="box">
+              <div id="Oil" class="gauge"></div>
+            </div>
+
+            <div class="box">
+              <div id="OilPressure" class="gauge"></div>
+            </div>
+
+          </div>
+          <br>
+          <div class="flexbox">
+            <div class="compassbox">
+              <canvas id="A0" class="gauge"></canvas>
+            </div>
+          </div>
+        </div>
+  
+
+
+      <script>
+
+      gm.info.watchVehicleData(showCoolantTemp, ['engine_coolant_temp']);
+      gm.info.watchVehicleData(showOilTemp, ['engine_oil_temp']);
+      gm.info.watchVehicleData(showOilPressure, ['engine_oil_pressure']);
+      gm.info.watchVehicleData(direction, ['compass_heading']);
+
+      var g1 = new JustGage({
+        id: 'Coolant',
+        titleMinFontSize: 20,
+        symbol: " F",
+        label: "Coolant Temp",
+        labelFontColor:"#0a0001",
+        labelMinFontSize:16,
+        value: 0,
+        min: 0,
+        max: 215,
+        pointer: true,
+        pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 8,
+          color: '#279ce6'
+        },
+        gaugeWidthScale: 0.6,
+        counter: true,
+        relativeGaugeSize: true,
+        levelColors:["#0e98f0", "#0c70b0", "#ff0000"]
+      });
+
+      var g2 = new JustGage({
+        id: 'Oil',
+        label: "Oil Temp",
+        labelFontColor:"#0a0001",
+        labelMinFontSize:16,
+        symbol: " F",
+        value: 25,
+        min: 0,
+        max: 215,
+        pointer: true,
+        pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 8,
+          color: '#279ce6'
+        },
+        gaugeWidthScale: 0.6,
+        counter: true,
+        relativeGaugeSize: true,
+        levelColors:["#0e98f0", "#0c70b0", "#ff0000"]
+      });
+
+      var g3 = new JustGage({
+        id: 'OilPressure',
+        label: "Oil Pressure",
+        labelFontColor:"#0a0001",
+        labelMinFontSize:16,
+        value: 40,
+        min: 0,
+        max: 200,
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 8,
+          color: '#279ce6'
+        },
+        counter: true,
+        relativeGaugeSize: true,
+        levelColors:["#0e98f0", "#0c70b0", "#ff0000"]
+      });
+
+
+    </script>
+
+    <script type="text/javascript">
+
+    document.gauges.forEach(function (gauge) {
+    console.log(gauge.type);
+    });
+
+    var gauge = new RadialGauge({
+    renderTo: 'A0',
+    minValue: 0,
+    maxValue: 360,
+    majorTicks: [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "N"
+    ],
+    minorTicks: 22,
+    ticksAngle: 360,
+    startAngle: 180,
+    strokeTicks: false,
+    highlights: false,
+    colorPlate: "#77bfed",
+    colorMajorTicks: "#000",
+    colorMinorTicks: "##0c70b0",
+    colorNumbers: "#000",
+    fontNumbersSize: 26,
+    colorNeedle: "rgba(240, 128, 128, 1)",
+    colorNeedleEnd: "rgba(255, 160, 122, .9)",
+    valueBox: true,
+    valueTextShadow: false,
+    colorCircleInner: "##0c70b0",
+    colorNeedleCircleOuter: "##0c70b0",
+    needleCircleSize: 15,
+    needleCircleOuter: false,
+    animationRule: "linear",
+    needleType: "line",
+    needleStart: 75,
+    needleEnd: 99,
+    needleWidth: 3,
+    borders: true,
+    borderInnerWidth: 0,
+    borderMiddleWidth: 0,
+    borderOuterWidth: 2,
+    colorBorderOuter: "#ccc",
+    colorBorderOuterEnd: "#ccc",
+    colorNeedleShadowDown: "#222",
+    borderShadowWidth: 0,
+    animationTarget: "plate",
+    units: "ᵍ",
+    title: "COMPASS",
+    fontTitleSize: 22,
+    colorTitle: "#000",
+    animationDuration: 0
+}).draw();
+    </script>
+
+  </body>
+</html>
